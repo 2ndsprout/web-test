@@ -5,14 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class NoteController {
 
-    private final NoteRepository noteRepository;
+    private final NoteService noteService;
 
     @RequestMapping("/test")
     @ResponseBody
@@ -22,10 +21,13 @@ public class NoteController {
 
     @RequestMapping("/")
     public String main(Model model) {
-        //1. DB에서 데이터 꺼내오기
-        List<Note> noteList = noteRepository.findAll();
 
-        //2. 꺼내온 데이터를 템플릿으로 보내기
+        List<Note> noteList = this.noteService.getList();
+
+        if(noteList.isEmpty()) {
+            Note note = this.noteService.saveDefault();
+        }
+
         model.addAttribute("noteList", noteList);
         model.addAttribute("targetNote", noteList.get(0));
 
@@ -34,31 +36,33 @@ public class NoteController {
 
     @PostMapping("/write")
     public String write() {
-        Note note = new Note();
-        note.setTitle("new title..");
-        note.setContent("");
-        note.setCreateDate(LocalDateTime.now());
-
-        noteRepository.save(note);
+        this.noteService.saveDefault();
 
         return "redirect:/";
     }
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Long id) {
-        Note note = noteRepository.findById(id).get();
+
+        Note note = this.noteService.getNote(id);
         model.addAttribute("targetNote", note);
-        model.addAttribute("noteList", noteRepository.findAll());
+        model.addAttribute("noteList", this.noteService.getList());
 
         return "main";
     }
     @PostMapping("/update")
     public String update(Long id, String title, String content) {
-        Note note = noteRepository.findById(id).get();
-        note.setTitle(title);
-        note.setContent(content);
 
-        noteRepository.save(note);
+        Note note = this.noteService.getNote(id);
+        this.noteService.update(note, title, content);
+
         return "redirect:/detail/" + id;
+    }
+    @PostMapping("/delete/{id}")
+    public String delete (@PathVariable Long id) {
+        Note note = this.noteService.getNote(id);
+        this.noteService.delete(note);
+
+        return "redirect:/";
     }
 }
