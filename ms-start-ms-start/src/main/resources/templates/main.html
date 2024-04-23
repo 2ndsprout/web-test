@@ -9,38 +9,83 @@
 </head>
 <body>
 <div class="bg-yellow-400">
-    <div class="bg-blue-300"><a href="/">logo</a></div>
-    <div class="bg-red-600 flex">
-        <div class="bg-red-300 w-[20%] h-[800px] text-center ">
-            <ul class="h-[100%] overflow-scroll">
-                <li th:each="note : ${noteList}"
-                    th:class="${note.id == targetNote.id} ? 'bg-blue-600' : ''">
-                    <a th:href="@{|/detail/${note.id}|}" th:text="${note.title}"></a>
+    <div class="navbar bg-neutral text-neutral-content">
+        <a class="btn btn-ghost text-xl" href="/">logo</a>
+    </div>
+    <div class="bg-black flex">
+
+        <div class="bg-indigo-300 w-[20%] h-[750px] text-center ">
+            <ul class="menu h-[100%] overflow-scroll">
+                <li th:each="notebook : ${notebookList}"
+                    th:with="basic='w-[90%] p-[10px]'">
+                    <th:block th:if="${!#lists.isEmpty(notebook.children)}">
+                    <details open>
+                        <summary class="flex p-0">
+                            <a th:href="@{|/books/${notebook.id}|}"
+                               th:class="${basic}"
+                               th:text="${notebook.name}"
+                               th:classappend="${notebook.id == targetNotebook.id} ? 'bg-blue-600' : ''">
+                            </a>
+                        </summary>
+                        <ul>
+                            <li th:each="child : ${notebook.children}">
+                                <a th:href="@{|/books/${child.id}|}"
+                                   th:class="${basic}"
+                                   th:text="${child.name}"
+                                   th:classappend="${child.id == targetNotebook.id} ? 'bg-blue-600' : ''">
+                                </a>
+                            </li>
+                        </ul>
+                    </details>
+                    </th:block>
+                    <th:block th:if="${#lists.isEmpty(notebook.children) and notebook.parent == null}">
+                        <a th:href="@{|/books/${notebook.id}|}"
+                           th:class="${basic}"
+                           th:text="${notebook.name}"
+                           th:classappend="${notebook.id == targetNotebook.id} ? 'bg-blue-600' : ''">
+                        </a>
+                    </th:block>
                 </li>
             </ul>
 
-            <form action="/write" method="post">
-                <input type="submit" value="추가">
+            <form action="/books/write" method="post">
+                <input class="btn btn-success" type="submit" value="노트북 추가">
+            </form>
+            <form th:action="@{|/groups/books/${targetNotebook.id}/write|}" method="post">
+                <input class="btn btn-warning" type="submit" value="하위 노트북 추가">
             </form>
         </div>
 
-        <div class="bg-green-300 w-[80%]">
-            <form action="/update" method="post" id="updateForm">
+        <div class="bg-red-300 w-[20%] h-[750px] text-center ">
+            <ul class="menu h-[100%] overflow-scroll">
+                <li th:each="note : ${noteList}"
+                    th:class="${note.id == targetNote.id} ? 'bg-blue-600' : ''">
+                    <a th:href="@{|/books/${targetNotebook.id}/notes/${note.id}|}" th:text="${note.title}"></a>
+                </li>
+            </ul>
+
+            <form th:action="@{|/books/${targetNotebook.id}/notes/write|}" method="post">
+                <input class="btn btn-success" type="submit" value="노트 추가">
+            </form>
+        </div>
+
+        <div class="bg-gray-500 w-[60%]">
+            <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/update|}" method="post" id="updateForm">
                 <div>
                     <input type="hidden" name="id" th:value="${targetNote.id}">
                 </div>
                 <div>
-                    <input type="text" name="title" th:value="${targetNote.title}">
+                    <input class="input input-bordered input-lg w-full max-w-xs" type="text" name="title" th:value="${targetNote.title}">
                 </div>
                 <div>
-                    <textarea name="content" cols="30" rows="10" th:text="${targetNote.content}"></textarea>
+                    <textarea class="textarea textarea-bordered textarea-lg w-full max-w-xs" name="content" cols="30" rows="10" th:text="${targetNote.content}"></textarea>
                 </div>
                 <div>
-                    <input type="button" value="수정" onclick="updateForm()">
+                    <input class="btn btn-info" type="button" value="수정" onclick="updateForm()">
                 </div>
             </form>
-            <form th:action="@{|/delete/${targetNote.id}|}" method="post" id="deleteForm">
-                <input type="button" value="삭제" onclick="deleteForm()">
+            <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/delete|}" method="post" id="deleteForm">
+                <input class="btn btn-error" type="button" value="삭제" onclick="deleteForm()">
             </form>
         </div>
     </div>

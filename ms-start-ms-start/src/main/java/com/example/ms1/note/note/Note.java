@@ -1,9 +1,7 @@
 package com.example.ms1.note.note;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.ms1.note.notebook.Notebook;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +21,9 @@ public class Note {
     private String content;
 
     private LocalDateTime createDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Notebook notebook;
 
 
 
