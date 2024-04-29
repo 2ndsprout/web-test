@@ -1,5 +1,5 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="bg-black flex">
+<div layout:fragment="content" class="bg-white flex">
 
         <div class="bg-indigo-300 w-[20%] h-[750px] text-center ">
             <ul class="menu h-[100%] overflow-scroll">
@@ -70,13 +70,13 @@
             </form>
         </div>
 
-    <div class="bg-gray-500 w-[60%]">
+    <div class="bg-white w-[60%]">
         <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/update|}" method="post" id="updateForm1">
             <div>
                 <input type="hidden" name="id" th:value="${targetNote.id}">
             </div>
             <div>
-                <input class="input input-bordered input-lg w-full max-w-xs" type="text" name="title" th:value="${targetNote.title}">
+                <input class="input input-bordered input-info input-lg w-full max-w-xs" type="text" name="title" th:value="${targetNote.title}">
             </div>
             <div id="editorContainer"> <!-- 에디터 컨테이너 -->
             </div>
