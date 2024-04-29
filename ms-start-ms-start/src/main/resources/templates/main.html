@@ -40,19 +40,19 @@
                 </form>
             <div class="flex flex-row justify-center mt-[10px]">
                 <form th:action="@{|/books/${targetNotebook.id}/update|}" method="post" id="updateForm">
-                    <input class="btn btn-info" type="button" value="노트북 수정" onclick="updateForm()">
+                    <input class="btn btn-info m-1" type="button" value="노트북 수정" onclick="updateForm()">
                 </form>
                 <form th:action="@{|/books/${targetNotebook.id}/delete|}" method="post" id="deleteForm">
-                    <input class="btn btn-error" type="button" value="노트북 삭제" onclick="deleteForm()">
+                    <input class="btn btn-error m-1" type="button" value="노트북 삭제" onclick="deleteForm()">
                 </form>
             </div>
             </div>
             <div class="flex flex-row justify-center mt-[10px]">
             <form action="/books/write" method="post">
-                <input class="btn btn-success" type="submit" value="노트북 추가">
+                <input class="btn btn-success m-1" type="submit" value="노트북 추가">
             </form>
             <form th:action="@{|/groups/books/${targetNotebook.id}/write|}" method="post">
-                <input class="btn btn-warning" type="submit" value="하위 노트북 추가">
+                <input class="btn btn-warning m-1" type="submit" value="하위 노트북 추가">
             </form>
             </div>
         </div>
@@ -81,13 +81,15 @@
             <div id="editorContainer"> <!-- 에디터 컨테이너 -->
             </div>
             <input type="hidden" name="content" id="contentHiddenField" th:value="${targetNote.content}"> <!-- 에디터 내용 저장용 히든 필드 -->
-            <div>
-                <input class="btn btn-info" type="button" value="수정" onclick="submitUpdateForm()">
-            </div>
         </form>
-        <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/delete|}" method="post" id="deleteForm">
-            <input class="btn btn-error" type="button" value="삭제" onclick="deleteForm()">
-        </form>
+        <div class="flex">
+            <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/update|}" method="post" id="updateForm1">
+                <input class="btn btn-info m-1" type="button" value="수정" onclick="submitUpdateForm()">
+            </form>
+            <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/delete|}" method="post" id="deleteForm">
+                <input class="btn btn-error m-1" type="button" value="삭제" onclick="deleteForm()">
+             </form>
+        </div>
     </div>
     </div>
 <script layout:fragment="script">
@@ -118,7 +120,7 @@ const editor = new toastui.Editor({
     el: document.getElementById("editorContainer"), // 에디터가 표시될 컨테이너
     previewStyle: "vertical",
     height: "500px",
-    initialEditType: "markdown",
+    initialEditType: "wysiwyg",
     initialValue: document.getElementById("contentHiddenField").value, // 초기 콘텐츠
 });
 </script>
