@@ -33,4 +33,15 @@ public class NotebookService {
     public void save (Notebook notebook) {
         this.notebookRepository.save(notebook);
     }
+    public void delete (Notebook notebook) {
+        this.notebookRepository.delete(notebook);
+    }
+    public void update (Notebook notebook, String name) {
+        if (name.trim().isEmpty()) {
+            name = "제목없음";
+        }
+
+        notebook.setName(name);
+        this.notebookRepository.save(notebook);
+    }
 }

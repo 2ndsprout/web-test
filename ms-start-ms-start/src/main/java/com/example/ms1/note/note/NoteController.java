@@ -3,12 +3,10 @@ package com.example.ms1.note.note;
 import com.example.ms1.note.notebook.Notebook;
 import com.example.ms1.note.notebook.NotebookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,7 @@ public class NoteController {
     private final NoteService noteService;
     private final NotebookService notebookService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@PathVariable Long notebookId) {
 
@@ -46,18 +45,20 @@ public class NoteController {
 
         return "main";
     }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/update")
     public String update(@PathVariable Long notebookId,
-                         @PathVariable Long id, String title, String content) {
+                         @PathVariable Long id,
+                         @RequestParam String title,
+                         @RequestParam String content) {
 
-     Note note = this.noteService.getNote(id);
-     this.noteService.update(note, title, content);
+        Note note = this.noteService.getNote(id);
+        this.noteService.update(note, title, content);
 
-     return "redirect:/books/%d/notes/%d".formatted(notebookId, id);
+        return "redirect:/books/%d/notes/%d".formatted(notebookId, id);
 
     }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/delete")
     public String delete (@PathVariable Long notebookId,
                           @PathVariable Long id) {
