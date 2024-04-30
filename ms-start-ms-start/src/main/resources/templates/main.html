@@ -42,8 +42,8 @@
                 <form th:action="@{|/books/${targetNotebook.id}/update|}" method="post" id="updateForm">
                     <input class="btn btn-info m-1" type="button" value="노트북 수정" onclick="updateForm()">
                 </form>
-                <form th:action="@{|/books/${targetNotebook.id}/delete|}" method="post" id="deleteForm">
-                    <input class="btn btn-error m-1" type="button" value="노트북 삭제" onclick="deleteForm()">
+                <form th:action="@{|/books/${targetNotebook.id}/delete|}" method="post" id="deleteNotebookForm">
+                    <input class="btn btn-error m-1" type="button" value="노트북 삭제" onclick="deleteNotebookForm()">
                 </form>
             </div>
             </div>
@@ -86,8 +86,8 @@
             <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/update|}" method="post" id="updateForm1">
                 <input class="btn btn-info m-1" type="button" value="수정" onclick="submitUpdateForm()">
             </form>
-            <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/delete|}" method="post" id="deleteForm">
-                <input class="btn btn-error m-1" type="button" value="삭제" onclick="deleteForm()">
+            <form th:action="@{|/books/${targetNotebook.id}/notes/${targetNote.id}/delete|}" method="post" id="deleteNoteForm">
+                <input class="btn btn-error m-1" type="button" value="삭제" onclick="deleteNoteForm()">
              </form>
         </div>
     </div>
@@ -108,8 +108,14 @@
     }
 }
 
-function deleteForm() {
-    const form = document.getElementById("deleteForm");
+function deleteNotebookForm() {
+    const form = document.getElementById("deleteNotebookForm");
+    if (confirm("삭제하시겠습니까?")) {
+        form.submit(); // 폼 제출
+    }
+}
+function deleteNoteForm() {
+    const form = document.getElementById("deleteNoteForm");
     if (confirm("삭제하시겠습니까?")) {
         form.submit(); // 폼 제출
     }
