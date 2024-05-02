@@ -1,5 +1,6 @@
 package com.example.ms1.note.notebook;
 
+import com.example.ms1.note.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +16,8 @@ public class NotebookService {
     public List<Notebook> getList () {
         return this.notebookRepository.findAll();
     }
-    public Notebook getNotebook (Long id) {
-        Optional<Notebook> notebook = this.notebookRepository.findById(id);
-        if (notebook.isPresent()) {
-            return notebook.get();
-        }
-        else {
-            throw new RuntimeException("notebook not found");
-        }
-    }
-    public Notebook saveDefault () {
+
+    public Notebook saveDefaultNotebook() {
         Notebook notebook = new Notebook();
 
         notebook.setName("새노트");
@@ -43,5 +36,14 @@ public class NotebookService {
 
         notebook.setName(name);
         this.notebookRepository.save(notebook);
+    }
+    public Notebook getNotebook (Long id) {
+        Optional<Notebook> notebook = this.notebookRepository.findById(id);
+        if (notebook.isPresent()) {
+            return notebook.get();
+        }
+        else {
+            throw new DataNotFoundException("notebook not found");
+        }
     }
 }

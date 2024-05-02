@@ -1,7 +1,8 @@
 package com.example.ms1.note.note;
 
+import com.example.ms1.note.MainDataDto;
+import com.example.ms1.note.MainService;
 import com.example.ms1.note.notebook.Notebook;
-import com.example.ms1.note.notebook.NotebookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,16 +17,16 @@ import java.util.List;
 public class NoteController {
 
     private final NoteService noteService;
-    private final NotebookService notebookService;
+    private final MainService mainService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@PathVariable Long notebookId) {
 
-        Notebook notebook = this.notebookService.getNotebook(notebookId);
-        Note note = this.noteService.saveDefault();
+        Notebook notebook = this.mainService.getNotebook(notebookId);
+        Note note = this.noteService.saveDefaultNote();
         notebook.addNote(note);
-        this.notebookService.save(notebook);
+        this.mainService.saveNotebook(notebook);
 
         return "redirect:/books/%d".formatted(notebookId);
     }
@@ -33,16 +34,9 @@ public class NoteController {
     @GetMapping("/{id}")
     public String detail(@PathVariable Long notebookId,
                          @PathVariable Long id, Model model) {
+        MainDataDto mainDataDto = this.mainService.getMainData(notebookId, id);
 
-        List<Notebook> notebookList = this.notebookService.getList();
-        Notebook targetNotebook = this.notebookService.getNotebook(notebookId);
-        Note targetNote = this.noteService.getNote(id);
-
-        model.addAttribute("notebookList",notebookList);
-        model.addAttribute("targetNotebook",targetNotebook);
-        model.addAttribute("noteList", targetNotebook.getNoteList());
-        model.addAttribute("targetNote", targetNote);
-
+        model.addAttribute("mainDataDto", mainDataDto);
         return "main";
     }
     @PreAuthorize("isAuthenticated()")

@@ -1,5 +1,10 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="bg-white flex">
+<div layout:fragment="content"
+     class="bg-white flex"
+     th:with="notebookList=${mainDataDto.notebookList},
+             targetNotebook=${mainDataDto.targetNotebook},
+             noteList=${mainDataDto.noteList},
+             targetNote=${mainDataDto.targetNote}">
 
         <div class="bg-indigo-300 w-[20%] h-[750px] text-center ">
             <ul class="menu h-[100%] overflow-scroll">

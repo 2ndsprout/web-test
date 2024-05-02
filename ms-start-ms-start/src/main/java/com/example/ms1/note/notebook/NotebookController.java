@@ -1,7 +1,7 @@
 package com.example.ms1.note.notebook;
 
+import com.example.ms1.note.MainService;
 import com.example.ms1.note.note.Note;
-import com.example.ms1.note.note.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class NotebookController {
 
     private final NotebookService notebookService;
-    private final NoteService noteService;
+    private final MainService mainService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/books/write")
     public String write () {
 
-        Notebook notebook = this.notebookService.saveDefault();
-        Note note = this.noteService.saveDefault();
+        Notebook notebook = this.notebookService.saveDefaultNotebook();
+        Note note = this.mainService.saveDefaultNote();
         notebook.addNote(note);
         this.notebookService.save(notebook);
 
@@ -38,8 +38,8 @@ public class NotebookController {
         if (parent.getParent() != null) {
             return "redirect:/books/%d".formatted(notebookId);
         }
-        Notebook child = this.notebookService.saveDefault();
-        Note note = this.noteService.saveDefault();
+        Notebook child = this.notebookService.saveDefaultNotebook();
+        Note note = this.mainService.saveDefaultNote();
         child.addNote(note);
         this.notebookService.save(child);
 
@@ -54,7 +54,7 @@ public class NotebookController {
 
         Notebook notebook = this.notebookService.getNotebook(id);
         if (notebook.getNoteList().isEmpty()) {
-            Note note = this.noteService.saveDefault();
+            Note note = this.mainService.saveDefaultNote();
             notebook.addNote(note);
             this.notebookService.save(notebook);
             return "redirect:/books/%d".formatted(id);

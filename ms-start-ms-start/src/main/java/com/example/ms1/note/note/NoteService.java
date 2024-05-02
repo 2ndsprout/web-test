@@ -1,5 +1,6 @@
 package com.example.ms1.note.note;
 
+import com.example.ms1.note.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
 
-    public Note saveDefault () {
+    public Note saveDefaultNote() {
 
         Note note = new Note();
 
@@ -31,7 +32,7 @@ public class NoteService {
             return note.get();
         }
         else {
-            throw new RuntimeException("note not found");
+            throw new DataNotFoundException("note not found");
         }
     }
     public void update (Note note, String title, String content) {

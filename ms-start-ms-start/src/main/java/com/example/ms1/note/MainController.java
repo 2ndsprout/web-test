@@ -4,6 +4,7 @@ import com.example.ms1.note.note.Note;
 import com.example.ms1.note.note.NoteService;
 import com.example.ms1.note.notebook.Notebook;
 import com.example.ms1.note.notebook.NotebookService;
+import com.sun.tools.javac.Main;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,27 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MainController {
 
-    private final NoteService noteService;
-    private final NotebookService notebookService;
+    private final MainService mainService;
 
     @RequestMapping("/")
     public String main(Model model) {
 
-        List<Notebook> notebookList = this.notebookService.getList();
-        if (notebookList.isEmpty()) {
+        MainDataDto mainDataDto = mainService.getDefaultMainData();
 
-            Notebook notebook = this.notebookService.saveDefault();
-            Note note = this.noteService.saveDefault();
-            notebook.addNote(note);
-            this.notebookService.save(notebook);
-
-            return "redirect:/";
-        }
-
-        model.addAttribute("notebookList",notebookList);
-        model.addAttribute("targetNotebook",notebookList.getLast());
-        model.addAttribute("noteList", notebookList.getLast().getNoteList());
-        model.addAttribute("targetNote", notebookList.getLast().getNoteList().getLast());
+        model.addAttribute("mainDataDto", mainDataDto);
 
         return "main";
     }

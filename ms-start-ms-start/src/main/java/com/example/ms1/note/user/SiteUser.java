@@ -28,4 +28,9 @@ public class SiteUser {
     private String email;
 
     private LocalDateTime createDate;
+
+    private String provider;
+
+    private String providerId;
+
 }
