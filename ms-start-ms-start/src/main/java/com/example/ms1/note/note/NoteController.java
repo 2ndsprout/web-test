@@ -24,6 +24,7 @@ public class NoteController {
     public String write(@PathVariable Long notebookId) {
 
         Notebook notebook = this.mainService.getNotebook(notebookId);
+
         this.mainService.addToNotebook(notebook);
 
         return "redirect:/books/%d".formatted(notebookId);
@@ -46,6 +47,7 @@ public class NoteController {
                          @RequestParam String content) {
 
         Note note = this.noteService.getNote(id);
+
         this.noteService.update(note, title, content);
 
         return "redirect:/books/%d/notes/%d".formatted(notebookId, id);
@@ -57,6 +59,7 @@ public class NoteController {
                           @PathVariable Long id) {
 
         Note note = this.noteService.getNote(id);
+
         this.noteService.delete(note);
 
         return "redirect:/books/%d".formatted(notebookId);

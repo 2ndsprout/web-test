@@ -37,7 +37,7 @@ public class NotebookController {
         if (parent.getParent() != null) {
             return "redirect:/books/%d".formatted(notebookId);
         }
-        Notebook notebook = this.mainService.addToChild(parent);
+        this.mainService.addToChild(parent);
 
         return "redirect:/books/%d".formatted(notebookId);
     }
@@ -62,6 +62,7 @@ public class NotebookController {
     public String delete (@PathVariable Long id) {
 
         Notebook notebook = this.notebookService.getNotebook(id);
+
         this.notebookService.delete(notebook);
 
         return "redirect:/";

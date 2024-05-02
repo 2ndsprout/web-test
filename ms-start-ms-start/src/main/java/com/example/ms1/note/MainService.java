@@ -46,14 +46,16 @@ public class MainService {
 
     public MainDataDto getDefaultMainData() {
 
-        List<Notebook> notebookList = this.notebookService.getList();
-        if (notebookList.isEmpty()) {
+        List<Notebook> notebookList = this.notebookService.getList(); // notebookList 불러옴
 
+        if (notebookList.isEmpty()) {                           // notebookList 비어있을때 notebook, note 생성
+                                                                // notebook 에 note 추가 하고 해당 notebook db에 저장
             Notebook notebook = this.saveDefaultNotebook();
             Note note = this.saveDefaultNote();
             notebook.addNote(note);
             this.notebookService.save(notebook);
         }
+
         Notebook targetNotebook = notebookList.getLast();
         List<Note> noteList = targetNotebook.getNoteList();
         Note targetNote = noteList.getLast();
