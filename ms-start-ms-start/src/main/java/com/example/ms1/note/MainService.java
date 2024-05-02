@@ -96,30 +96,32 @@ public class MainService {
 
     public void delete(Notebook notebook) {
 
-        if (notebook.getChildren().isEmpty()) {
+        if (notebook.getChildren().isEmpty()) {     // 해당하는 notebook 에 child 가 없으면 deleteNotebook 메서드 실행
             this.deleteNotebook(notebook);
         }
         else {
-            this.deleteGroup(notebook);
+            this.deleteGroup(notebook);             // 해당하는 notebook 에 child 가 있으면 deleteGroup 메서드 실행
         }
     }
 
     public void deleteNotebook (Notebook notebook) {
 
-            List<Note> noteList = notebook.getNoteList();
-            for (Note note : noteList) {
-                this.noteService.delete(note);
-            }
-            this.notebookService.delete(notebook);
+        // 외래키는 자식 엔터티에 붙어있다. 자식먼저 삭제 후 부모를 삭제해야한다.
+
+        List<Note> noteList = notebook.getNoteList(); // 해당하는 notebook 의 noteList 를 불러옴
+        for (Note note : noteList) {
+            this.noteService.delete(note);            // noteList 의 note 들을 순차적으로 삭제
+        }
+        this.notebookService.delete(notebook);        // note 들을 전부 삭제 후 해당하는 notebook 삭제
     }
 
-    public void deleteGroup(Notebook notebook) {
+    public void deleteGroup(Notebook parent) {
 
-        List<Notebook> children = notebook.getChildren();
+        List<Notebook> children = parent.getChildren(); // 해당하는 notebook 의 children (자식노트북리스트) 을 불러옴
         for (Notebook child : children) {
 
-            this.deleteNotebook(child);
-        }
-        this.deleteNotebook(notebook);
+            this.deleteNotebook(child);                   // children 의 child(자식노트북) 을 먼저 만들어놓은 deleteNotebook 메서드로
+        }                                                 // note 들을 순차적으로 삭제 후 child 도 순차적으로 삭제
+        this.deleteNotebook(parent);                      // 모든 child 삭제 후 부모 notebook(parent) 삭제
     }
 }
