@@ -63,7 +63,7 @@ public class NotebookController {
 
         Notebook notebook = this.notebookService.getNotebook(id);
 
-        this.notebookService.delete(notebook);
+        this.mainService.delete(notebook);
 
         return "redirect:/";
     }

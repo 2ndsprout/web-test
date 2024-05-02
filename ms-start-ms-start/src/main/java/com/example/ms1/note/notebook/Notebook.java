@@ -22,10 +22,10 @@ public class Notebook {
     @ManyToOne
     private Notebook parent;
 
-    @OneToMany(mappedBy = "notebook", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "notebook")
     private List<Note> noteList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parent")
     private List<Notebook> children = new ArrayList<>();
 
     public void addNote (Note note) {

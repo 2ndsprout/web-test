@@ -93,4 +93,33 @@ public class MainService {
         parent.addChild(child);
         return this.notebookService.save(parent);
     }
+
+    public void delete(Notebook notebook) {
+
+        if (notebook.getChildren().isEmpty()) {
+            this.deleteNotebook(notebook);
+        }
+        else {
+            this.deleteGroup(notebook);
+        }
+    }
+
+    public void deleteNotebook (Notebook notebook) {
+
+            List<Note> noteList = notebook.getNoteList();
+            for (Note note : noteList) {
+                this.noteService.delete(note);
+            }
+            this.notebookService.delete(notebook);
+    }
+
+    public void deleteGroup(Notebook notebook) {
+
+        List<Notebook> children = notebook.getChildren();
+        for (Notebook child : children) {
+
+            this.deleteNotebook(child);
+        }
+        this.deleteNotebook(notebook);
+    }
 }
