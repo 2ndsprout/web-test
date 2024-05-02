@@ -25,9 +25,9 @@ public class MainService {
         return this.noteService.getNote(id);
     }
 
-    public void saveNotebook(Notebook notebook) {
+    public Notebook saveNotebook(Notebook notebook) {
 
-        this.notebookService.save(notebook);
+        return this.notebookService.save(notebook);
     }
 
     public List<Notebook> getNotebookList () {
@@ -74,5 +74,21 @@ public class MainService {
         mainDataDto.setTargetNote(targetNote);
 
         return mainDataDto;
+    }
+    public Notebook addToNotebook (Notebook notebook) {
+
+        Note note = this.saveDefaultNote();
+        notebook.addNote(note);
+        return this.saveNotebook(notebook);
+    }
+    public Notebook addToChild (Notebook parent) {
+
+        Notebook child = this.notebookService.saveDefaultNotebook();
+        Note note = this.saveDefaultNote();
+        child.addNote(note);
+        this.notebookService.save(child);
+
+        parent.addChild(child);
+        return this.notebookService.save(parent);
     }
 }

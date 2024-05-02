@@ -23,9 +23,8 @@ public class NotebookController {
     public String write () {
 
         Notebook notebook = this.notebookService.saveDefaultNotebook();
-        Note note = this.mainService.saveDefaultNote();
-        notebook.addNote(note);
-        this.notebookService.save(notebook);
+
+        this.mainService.addToNotebook(notebook);
 
         return "redirect:/";
     }
@@ -38,13 +37,7 @@ public class NotebookController {
         if (parent.getParent() != null) {
             return "redirect:/books/%d".formatted(notebookId);
         }
-        Notebook child = this.notebookService.saveDefaultNotebook();
-        Note note = this.mainService.saveDefaultNote();
-        child.addNote(note);
-        this.notebookService.save(child);
-
-        parent.addChild(child);
-        this.notebookService.save(parent);
+        Notebook notebook = this.mainService.addToChild(parent);
 
         return "redirect:/books/%d".formatted(notebookId);
     }
@@ -54,9 +47,9 @@ public class NotebookController {
 
         Notebook notebook = this.notebookService.getNotebook(id);
         if (notebook.getNoteList().isEmpty()) {
-            Note note = this.mainService.saveDefaultNote();
-            notebook.addNote(note);
-            this.notebookService.save(notebook);
+
+            this.mainService.addToNotebook(notebook);
+
             return "redirect:/books/%d".formatted(id);
         }
 
@@ -67,6 +60,7 @@ public class NotebookController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/books/{id}/delete")
     public String delete (@PathVariable Long id) {
+
         Notebook notebook = this.notebookService.getNotebook(id);
         this.notebookService.delete(notebook);
 

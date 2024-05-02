@@ -23,8 +23,8 @@ public class NotebookService {
         notebook.setName("새노트");
         return this.notebookRepository.save(notebook);
     }
-    public void save (Notebook notebook) {
-        this.notebookRepository.save(notebook);
+    public Notebook save (Notebook notebook) {
+       return this.notebookRepository.save(notebook);
     }
     public void delete (Notebook notebook) {
         this.notebookRepository.delete(notebook);
